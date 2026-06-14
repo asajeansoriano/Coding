@@ -13,20 +13,6 @@ from bs4 import BeautifulSoup
 
 
 
-# Cleanly prints data table with formatting
-def print_data_table(table: str):
-    # Find max string length in all cells in table
-    max_cell_len = max(len(str(col)) for row in table for col in row)
-
-    # Default to 16 character width limit if all cells are shorter
-    # otherwise scale up to fit longest text +2 for padding
-    col_width = max(16, max_cell_len + 2)
-
-    for row in table:
-        for col in row:
-            print(f"{col:<{col_width}}", end = "")
-        print()
-
 
 
 # Function to parse a Google Doc taking a Google Doc URL as argument
@@ -82,6 +68,7 @@ def google_doc_parser(URL: str) -> str:
 
 
 # Print unicode characters in given x-y coords from data table
+# using correct orientation where origin (0,0) is top left
 def print_grid_characters(table: list):
 
     coords_and_chars = []
