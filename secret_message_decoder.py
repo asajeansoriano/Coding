@@ -4,12 +4,13 @@
 #
 # A Google Doc contains a list of Unicode characters and 2D grid positions 
 # This program writes a function taking in a Google Doc URL as an argument.
-# Then it parses data from the doc.
+# Then it parses data from the doc and prints the letter in correct orientation.
 # The external library used for this project is BeautifulSoup
 # from the bs4 module used for parsing the Google Doc without API concerns.
 
 import requests
 from bs4 import BeautifulSoup
+
 
 
 # Cleanly prints data table with formatting
@@ -25,6 +26,7 @@ def print_data_table(table: str):
         for col in row:
             print(f"{col:<{col_width}}", end = "")
         print()
+
 
 
 # Function to parse a Google Doc taking a Google Doc URL as argument
@@ -71,15 +73,12 @@ def google_doc_parser(URL: str) -> str:
             if row_data:
                 data.append(row_data)
 
-        # Cleanly print data table with helper function
-        #print_data_table(data)
-
-
         # Return parsed data
         return data
     
     except requests.exceptions.RequestException as e:
         return f"An error occurred: {e}"
+
 
 
 # Print unicode characters in given x-y coords from data table
@@ -112,15 +111,14 @@ def print_grid_characters(table: list):
     for x, char, y in coords_and_chars:
         grid[y][x] = char
 
-    # Print grid
-    for row in grid:
+    # Print grid right-side up so (0,0) is top left
+    for row in reversed(grid):
         print("".join(row))
+
 
 
 # Testing
 test_URL = "https://docs.google.com/document/d/e/2PACX-1vTMOmshQe8YvaRXi6gEPKKlsC6UpFJSMAk4mQjLm_u1gmHdVVTaeh7nBNFBRlui0sTZ-snGwZM4DBCT/pub"
 table = google_doc_parser(test_URL)
-#print("Parsed text:")
-#print(parsed_text)
 
 print_grid_characters(table)
