@@ -13,6 +13,21 @@ from bs4 import BeautifulSoup
 import re
 
 
+# Cleanly prints data table with formatting
+def print_data_table(table: str):
+    # Find max string length in all cells in table
+    max_cell_len = max(len(str(col)) for row in table for col in row)
+
+    # Default to 16 character width limit if all cells are shorter
+    # otherwise scale up to fit longest text +2 for padding
+    col_width = max(16, max_cell_len + 2)
+
+    for row in table:
+        for col in row:
+            print(f"{col:<{col_width}}", end = "")
+        print()
+
+
 # Function to parse a Google Doc taking a Google Doc URL as argument
 # Retrieves and parses unicode characters in the grid
 # and the x-y coords for each character
@@ -51,21 +66,15 @@ def google_doc_parser(URL: str) -> str:
             for cell in row.find_all('td'):
                 cell_data = cell.get_text().strip()
                 row_data.append(cell_data) # Add to current row list
-                print(cell_data)
+                #print(cell_data)
 
             # Append if row contains cells
             if row_data:
                 data.append(row_data)
 
-            # Extract raw text from each cell in row and insert into data
-            #data.append([cell.get_text().strip() for cell in row.find_all('td')])
+        # Cleanly print data table with helper function
+        print_data_table(data)
 
-            # Print row
-            #print("Data: ")
-            #print(data)
-
-        print("Data: ")
-        print(data)
         # Return parsed data
         return data
     
