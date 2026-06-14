@@ -4,9 +4,14 @@
 #
 # A Google Doc contains a list of Unicode characters and 2D grid positions 
 # This program writes a function taking in a Google Doc URL as an argument.
-# Then it parses data from the doc and prints the letter in correct orientation.
+# Then it parses data from the doc. 
+# Another function prints the characters in correct orientation.
 # The external library used for this project is BeautifulSoup
 # from the bs4 module used for parsing the Google Doc without API concerns.
+#
+# Github link: 
+# https://github.com/asajeansoriano/Coding/blob/master/secret_message_decoder.py
+#
 
 import requests
 from bs4 import BeautifulSoup
@@ -105,7 +110,10 @@ def print_grid_characters(table: list):
 
 
 # Testing
-test_URL = "https://docs.google.com/document/d/e/2PACX-1vTMOmshQe8YvaRXi6gEPKKlsC6UpFJSMAk4mQjLm_u1gmHdVVTaeh7nBNFBRlui0sTZ-snGwZM4DBCT/pub"
-table = google_doc_parser(test_URL)
+#test_URL = "https://docs.google.com/document/d/e/2PACX-1vTMOmshQe8YvaRXi6gEPKKlsC6UpFJSMAk4mQjLm_u1gmHdVVTaeh7nBNFBRlui0sTZ-snGwZM4DBCT/pub"
+#table = google_doc_parser(test_URL)
+#print_grid_characters(table)
 
-print_grid_characters(table)
+#test_URL2 = "https://docs.google.com/document/d/e/2PACX-1vSvM5gDlNvt7npYHhp_XfsJvuntUhq184By5xO_pA4b_gCWeXb6dM6ZxwN8rE6S4ghUsCj2VKR21oEP/pub"
+#table2 = google_doc_parser(test_URL2)
+#print_grid_characters(table2)
