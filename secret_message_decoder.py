@@ -10,7 +10,6 @@
 
 import requests
 from bs4 import BeautifulSoup
-import re
 
 
 # Cleanly prints data table with formatting
@@ -50,7 +49,7 @@ def google_doc_parser(URL: str) -> str:
         # Parse HTML content 
         content = BeautifulSoup(response.text, 'html.parser')
         
-        # Skip any text and data table within doc
+        # Skip any text and go straight to data table within doc
         # Then extract data table from doc
         table = content.find('table')
 
@@ -73,7 +72,8 @@ def google_doc_parser(URL: str) -> str:
                 data.append(row_data)
 
         # Cleanly print data table with helper function
-        print_data_table(data)
+        #print_data_table(data)
+
 
         # Return parsed data
         return data
@@ -82,8 +82,45 @@ def google_doc_parser(URL: str) -> str:
         return f"An error occurred: {e}"
 
 
+# Print unicode characters in given x-y coords from data table
+def print_grid_characters(table: list):
+
+    coords_and_chars = []
+    max_x = 0
+    max_y = 0
+
+    for row in table:
+        # Skip header row
+        if not row or any(c.isalpha() for c in str(row[0])):
+            continue
+
+        # Convert coords to ints and get char
+        x = int(row[0])
+        char = row[1]
+        y = int(row[2])
+
+        coords_and_chars.append((x, char, y))
+
+        # Get largest coords for grid size
+        if x > max_x: max_x = x
+        if y > max_y: max_y = y
+
+    # Initialize 2D grid and fill with spaces using max dimensions + 1
+    grid = [[" " for _ in range(max_x + 1)] for _ in range(max_y + 1)]
+
+    # Populate grid with characters
+    for x, char, y in coords_and_chars:
+        grid[y][x] = char
+
+    # Print grid
+    for row in grid:
+        print("".join(row))
+
+
 # Testing
 test_URL = "https://docs.google.com/document/d/e/2PACX-1vTMOmshQe8YvaRXi6gEPKKlsC6UpFJSMAk4mQjLm_u1gmHdVVTaeh7nBNFBRlui0sTZ-snGwZM4DBCT/pub"
-parsed_text = google_doc_parser(test_URL)
+table = google_doc_parser(test_URL)
 #print("Parsed text:")
 #print(parsed_text)
+
+print_grid_characters(table)
