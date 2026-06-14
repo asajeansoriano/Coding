@@ -39,19 +39,34 @@ def google_doc_parser(URL: str) -> str:
         # Then extract data table from doc
         table = content.find('table')
 
-        # Initialize new string data to insert data table extraction from table
-        data = ""
+        # Initialize new list data to insert data table extraction from table
+        data = []
 
         # Iterates through each row and prints each cell
         for row in table.find_all('tr'):
+            #Initalize temporary current row
+            row_data = []
+
+            # Extract data from each cell in this row
+            for cell in row.find_all('td'):
+                cell_data = cell.get_text().strip()
+                row_data.append(cell_data) # Add to current row list
+                print(cell_data)
+
+            # Append if row contains cells
+            if row_data:
+                data.append(row_data)
+
             # Extract raw text from each cell in row and insert into data
-            data = [cell.get_text().strip() for cell in row.find_all('td')]
+            #data.append([cell.get_text().strip() for cell in row.find_all('td')])
 
             # Print row
-            print(data)
+            #print("Data: ")
+            #print(data)
 
+        print("Data: ")
+        print(data)
         # Return parsed data
-        #return document_text.strip()
         return data
     
     except requests.exceptions.RequestException as e:
@@ -61,4 +76,5 @@ def google_doc_parser(URL: str) -> str:
 # Testing
 test_URL = "https://docs.google.com/document/d/e/2PACX-1vTMOmshQe8YvaRXi6gEPKKlsC6UpFJSMAk4mQjLm_u1gmHdVVTaeh7nBNFBRlui0sTZ-snGwZM4DBCT/pub"
 parsed_text = google_doc_parser(test_URL)
-#print("Parsed text: " + parsed_text)
+#print("Parsed text:")
+#print(parsed_text)
